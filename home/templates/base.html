@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TreeG Builders{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9; /* Light green background */
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #2e7d32;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'add_client' %}">Add Client</a>
+        <a href="{% url 'add_transaction' %}">Add Transaction</a>
+        <a href="{% url 'add_bank_account' %}">Manage Bank</a>
+
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

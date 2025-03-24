@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Bank Account List</h1>
+    <table>
+        <tr>
+            <th>Account Name</th>
+            <th>Balance</th>
+        </tr>
+        {% for bank_account in bank_accounts %}
+        <tr>
+            <td>{{ bank_account.account_name }}</td>
+            <td>{{ bank_account.balance }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'add_bank_account' %}">Add New Bank Account</a>
+{% endblock %}

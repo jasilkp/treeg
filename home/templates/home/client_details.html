@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Details</title>
+    <style>
+        body {
+            background-color: #e3f2e3;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #aaa;
+        }
+        h2 {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Client Details</h1>
+
+
+    <div class="section">
+    <h2>{{ client.name }}</h2>
+
+<p><strong>Amount Given:</strong> ₹{{ client.amount_given }}</p>
+<p><strong>Project Name:</strong> {{ client.project_name }}</p>
+
+<h3>Transactions</h3>
+<table border="1">
+    <tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Amount</th>
+    </tr>
+    {% for transaction in transactions %}
+    <tr>
+        <td>{{ transaction.date }}</td>
+        <td>{{ transaction.category }}</td>
+        <td>${{ transaction.amount }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">No transactions yet.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Total Transactions: ₹{{ total_amount }}</h3>
+
+<a href="{% url 'add_transaction' client.id %}" class="btn">Add Transaction</a>
+
+
+
+</body>
+</html>
+

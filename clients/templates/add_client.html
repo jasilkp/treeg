@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #aaa;
+        }
+        h2 {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .btn {
+            display: block;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add New Client</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Name</label>
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            <label>Project Name</label>
+            {{ form.project_name }}
+        </div>
+        <div class="form-group">
+            <label>Amount Given</label>
+            {{ form.amount_given }}
+        </div>
+        <button type="submit" class="btn">Save Client</button>
+    </form>
+    <a href="{% url 'dashboard' %}" class="btn">Cancel</a>
+</div>
+
+</body>
+</html>
+

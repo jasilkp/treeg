@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactions List</title>
+</head>
+<body>
+    <h1>Transactions List</h1>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Client</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.date }}</td>
+            <td>{{ transaction.transaction_type }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.client.name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'add_transaction' %}">Add New Transaction</a>
+</body>
+</html>
