@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'home',
     'accounts',
     'django_extensions',
-    'acc'
+    'acclive',
+
+
+
 
 
 

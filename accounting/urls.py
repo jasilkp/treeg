@@ -30,7 +30,8 @@ urlpatterns = [
     path('transactions/', include('transactions.urls')),
     path('bank/', include('bank.urls')),
     path('accounts/', include('accounts.urls')),
-    path('acc/',include('acc.urls')),
+    path('acclive/',include('acclive.urls')),
+
 
 
 
