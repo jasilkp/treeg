@@ -39,20 +39,20 @@
             <td><input type="date" class="date-input" value="{{ entry.date|date:'Y-m-d' }}"></td>
             <td contenteditable="true" class="editable">{{ entry.site_name }}</td>
             <td contenteditable="true" class="editable">{{ entry.description }}</td>
-            <td><input type="checkbox" class="bank-checkbox" {% if entry.bank_transaction %}checked{% endif %} onchange="toggleBankMode(this)"></td>
+            <td><input type="checkbox" class="bank-checkbox" {% if entry.bank %}checked{% endif %} onchange="toggleBankMode(this)"></td>
             <td contenteditable="true" class="editable numeric income" oninput="updateBalances()">{{ entry.income|default:"0.00" }}</td>
             <td contenteditable="true" class="editable numeric expense" oninput="updateBalances()">{{ entry.expense|default:"0.00" }}</td>
             <td class="balance">0.00</td>
             <td>
-                <select class="transaction-type" {% if not entry.bank_transaction %}disabled{% endif %} onchange="updateBalances()">
+                <select class="transaction-type" {% if not entry.bank %}disabled{% endif %} onchange="updateBalances()">
                     <option {% if entry.transaction_type == 'Withdrawal' %}selected{% endif %}>Withdrawal</option>
                     <option {% if entry.transaction_type == 'Transfer' %}selected{% endif %}>Transfer</option>
                     <option {% if entry.transaction_type == 'Deposit' %}selected{% endif %}>Deposit</option>
                 </select>
             </td>
-            <td contenteditable="true" class="editable numeric amount" {% if not entry.bank_transaction %}class="disabled"{% endif %} oninput="updateBalances()">{{ entry.amount|default:"0.00" }}</td>
+            <td contenteditable="true" class="editable numeric amount" {% if not entry.bank %}class="disabled"{% endif %} oninput="updateBalances()">{{ entry.amount|default:"0.00" }}</td>
             <td class="amount-balance">0.00</td>
-            <td contenteditable="true" class="editable check-number" {% if not entry.bank_transaction %}class="disabled"{% endif %}>{{ entry.check_number }}</td>
+            <td contenteditable="true" class="editable check-number" {% if not entry.bank %}class="disabled"{% endif %}>{{ entry.check_number }}</td>
             <td><button class="delete-btn" onclick="deleteRow(this)">🗑</button></td>
         </tr>
         {% endfor %}
@@ -120,7 +120,33 @@ function updateBalances() {
         }
         amountBalanceCell.innerText = amountBalance.toFixed(2);
         previousAmountBalance = amountBalance;
+
+        // Save the entry data
+        saveRowData(row);
     });
+}
+
+function saveRowData(row) {
+    let entryId = row.getAttribute("data-id");
+    let date = row.querySelector(".date-input").value;
+    let siteName = row.querySelector(".editable:nth-child(2)").innerText;
+    let description = row.querySelector(".editable:nth-child(3)").innerText;
+    let bank = row.querySelector(".bank-checkbox").checked;
+    let income = parseFloat(row.querySelector(".income").innerText || "0");
+    let expense = parseFloat(row.querySelector(".expense").innerText || "0");
+    let transactionType = row.querySelector(".transaction-type").value;
+    let amount = parseFloat(row.querySelector(".amount").innerText || "0");
+    let checkNumber = row.querySelector(".check-number").innerText;
+
+    fetch('/save_entry/', {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": document.getElementById("csrf-token").value },
+        body: JSON.stringify({ id: entryId, date: date, site_name: siteName, description: description, bank: bank, income: income, expense: expense, transaction_type: transactionType, amount: amount, check_number: checkNumber })
+    }).then(response => response.json()).then(data => {
+        if (data.id) {
+            row.setAttribute("data-id", data.id);
+        }
+    }).catch(error => console.error('Error:', error));
 }
 
 function toggleBankMode(checkbox) {
@@ -150,20 +176,16 @@ function deleteRow(button) {
     let row = button.closest("tr");
     let entryId = row.getAttribute("data-id");
 
-    fetch('/acclive/delete_entry/', {
+    fetch('/delete_entry/', {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-CSRFToken": document.getElementById("csrf-token").value },
         body: JSON.stringify({ id: entryId })
     }).then(response => response.json()).then(() => {
         row.remove();
         updateBalances();
-    });
+    }).catch(error => console.error('Error:', error));
 }
 </script>
 
 </body>
 </html>
-
-
-
-
