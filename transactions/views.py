@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Transaction
 from .forms import TransactionForm
 from clients.models import Client
+from django.http import JsonResponse
 
 
 @login_required
@@ -31,4 +32,14 @@ def add_transaction(request , client_id):
         'transactions': transactions ,
         'total_amount': total_amount  # Pass Grand Total to template
     } )
+
+
+@login_required
+def delete_transaction(request, transaction_id):
+    if request.method == 'POST':
+        transaction = get_object_or_404(Transaction, id=transaction_id)
+        client_id = transaction.client.id
+        transaction.delete()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 

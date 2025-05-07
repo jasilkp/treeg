@@ -3,118 +3,412 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>ABLE INFRA ENGINEERING LLP - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #e3f2e3; /* Light green */
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 30px;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 800px;
+
+        .dashboard-container {
+            max-width: 1200px;
             margin: auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #aaa;
-            position: relative;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.1),
+                       0 5px 15px rgba(30, 58, 138, 0.05);
         }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f0f5ff;
+        }
+
+        .branding {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .company-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .company-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #219EBC;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .company-motto {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            color: #219EBC;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 500;
+        }
+
         .logout-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: red;
+            background: #219EBC;
             color: white;
-            padding: 8px 12px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 5px;
-            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
             font-size: 14px;
-            font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
         .logout-btn:hover {
-            background: darkred;
+            background: #20728F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 158, 188, 0.2);
         }
+
         .section {
-            margin-bottom: 20px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
         }
-        h2 {
-            background: #4CAF50;
+
+        .section-header {
+            background: #219EBC;
             color: white;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
         }
-        ul {
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .add-btn {
+            background: white;
+            color: #219EBC;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .add-btn:hover {
+            background: #f8fafc;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.1);
+        }
+
+        .client-list {
             list-style-type: none;
             padding: 0;
+            margin: 0;
         }
-        li {
-            background: #f9f9f9;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
+
+        .client-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #f1f5f9;
         }
-        a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-        .delete-btn {
-            color: red;
-            float: right;
-        }
-        .btn {
-            background: white;
-            color: #4CAF50;
-            padding: 5px 10px;
-            font-size: 14px;
-            border: 1.5px solid #4CAF50;
-            border-radius: 4px;
-            text-decoration: none;
+
+        .client-name {
+            font-size: 16px;
+            color: #222;
             font-weight: 500;
-            transition: 0.3s ease-in-out;
         }
-        .btn:hover {
-            background: #4CAF50;
+
+        .client-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .client-actions .btn {
+            margin: 0;
+            padding: 6px 18px;
+            font-size: 14px;
+        }
+
+        .delete-btn {
+            color: #dc3545;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            font-size: 16px;
+        }
+
+        .delete-btn:hover {
+            color: #c82333;
+        }
+
+        .expense-btn {
+            display: inline-block;
+            background: #219EBC;
             color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px;
+        }
+
+        .expense-btn:hover {
+            background: #20728F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 158, 188, 0.2);
+        }
+
+        .btn {
+            background: #219EBC;
+        }
+
+        .btn:hover {
+            background: #20728F;
+        }
+
+        .card-header {
+            background: #219EBC;
+        }
+
+        .card-title {
+            color: #219EBC;
+        }
+
+        .nav-link {
+            color: #219EBC;
+        }
+
+        .nav-link:hover {
+            color: #20728F;
+        }
+
+        .btn-primary {
+            background: #219EBC;
+        }
+
+        .btn-primary:hover {
+            background: #20728F;
+        }
+
+        .custom-confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .custom-confirm-dialog .message {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .custom-confirm-dialog .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .custom-confirm-dialog button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .custom-confirm-dialog .confirm-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .custom-confirm-dialog .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .plain-view-btn {
+            background: none;
+            border: none;
+            color: #222;
+            font-size: 14px;
+            padding: 6px 18px;
+            cursor: pointer;
+            text-decoration: underline transparent;
+            transition: text-decoration 0.2s;
+        }
+
+        .plain-view-btn:hover {
+            text-decoration: underline #219EBC;
+            color: #219EBC;
         }
     </style>
 </head>
 <body>
+    <input type="hidden" id="csrf-token" value="{% csrf_token %}">
+    <div class="dashboard-container">
+        <header class="header">
+            <div class="branding">
+                <img src="/static/images/company-logo.png" alt="ABLE INFRA ENGINEERING LLP Logo" class="company-logo">
+                <div class="company-info">
+                    <h1 class="company-title">ABLE INFRA ENGINEERING LLP</h1>
+                    <div class="company-motto">Built with Quality</div>
+                </div>
+            </div>
+            <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </header>
 
-<div class="container">
-    <form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn">Logout</button>
-    </form>
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Latest Works (Clients)</h2>
+                <a href="{% url 'add_client' %}" class="add-btn">Add Client</a>
+            </div>
+            <div>
+                {% for client in clients %}
+                {% if not client.deleted %}
+                <div class="client-row">
+                    <span class="client-name">{{ client.name }}</span>
+                    <span class="client-actions">
+                        <a href="{% url 'client_details' client.id %}" class="plain-view-btn">View</a>
+                        <button class="delete-btn" onclick="showDeleteConfirmation({{ client.id }})">🗑</button>
+                    </span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
-    <h1>Welcome to TreeG Builders Accounting</h1>
-
-    <div class="section">
-        <h2 style="display: flex; justify-content: space-between; align-items: center; font-size: 18px;">
-            Latest Works (Clients)
-            <a href="{% url 'add_client' %}" class="btn">Add Client</a>
-        </h2>
-
-        <ul>
-            {% for client in clients %}
-                <li>
-                    <a href="{% url 'client_details' client.id %}">{{ client.name }}</a>
-                    <a href="{% url 'delete_client' client.id %}" class="delete-btn">Delete</a>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Live Expense Tracking</h2>
+            </div>
+            <div style="text-align: center;">
+                <a href="{% url 'table' %}" class="expense-btn">View Income & Expense Report</a>
+            </div>
+        </div>
     </div>
 
-    <div class="section">
-        <h2>live Expense</h2>
-       <a href="{% url 'table' %}" class="btn">Know your live Income and Expense</a>
-
-
+    <div class="dialog-overlay" id="dialogOverlay"></div>
+    <div class="custom-confirm-dialog" id="confirmDialog">
+        <div class="message">Are you sure you want to delete this client? The client will be moved to the admin panel.</div>
+        <div class="buttons">
+            <button class="cancel-btn" onclick="hideConfirmDialog()">Cancel</button>
+            <button class="confirm-btn" onclick="confirmDelete()">Delete</button>
+        </div>
     </div>
-</div>
 
+    <script>
+    let deleteCallback = null;
+
+    function showConfirmDialog(callback) {
+        document.getElementById('dialogOverlay').style.display = 'block';
+        document.getElementById('confirmDialog').style.display = 'block';
+        deleteCallback = callback;
+    }
+
+    function hideConfirmDialog() {
+        document.getElementById('dialogOverlay').style.display = 'none';
+        document.getElementById('confirmDialog').style.display = 'none';
+        deleteCallback = null;
+    }
+
+    function confirmDelete() {
+        if (deleteCallback) {
+            deleteCallback();
+        }
+        hideConfirmDialog();
+    }
+
+    function showDeleteConfirmation(clientId) {
+        showConfirmDialog(() => {
+            fetch(`/clients/delete/${clientId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.getElementById('csrf-token').value,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.reload();
+                } else {
+                    alert('Failed to delete client');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete client');
+            });
+        });
+    }
+    </script>
 </body>
 </html>
 

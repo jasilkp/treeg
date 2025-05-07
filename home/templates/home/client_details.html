@@ -3,89 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Details</title>
+    <title>ABLE INFRA ENGINEERING LLP - Client Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #e3f2e3;
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 30px;
+            min-height: 100vh;
         }
+
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #aaa;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(33, 158, 188, 0.1),
+                       0 5px 15px rgba(33, 158, 188, 0.05);
         }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            color: #219EBC;
+            margin: 0 0 30px 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
         h2 {
-            background: #4CAF50;
+            font-family: 'Montserrat', sans-serif;
+            background: #219EBC;
             color: white;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 30px 0 20px;
         }
+
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #219EBC;
+            font-size: 18px;
+            margin: 25px 0 15px;
+            font-weight: 600;
+        }
+
+        p {
+            margin: 15px 0;
+            color: #475569;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        strong {
+            color: #219EBC;
+            font-weight: 600;
+        }
+
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
         }
+
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 15px;
             text-align: left;
         }
+
         th {
-            background: #4CAF50;
+            background: #219EBC;
             color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
+        td {
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
         .btn {
             display: inline-block;
-            padding: 10px 15px;
-            background: #4CAF50;
+            padding: 12px 24px;
+            background: #219EBC;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 10px;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #20728F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 158, 188, 0.2);
+        }
+
+        .amount {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: #219EBC;
+        }
+
+        .client-name {
+            color: #219EBC;
+        }
+
+        .btn-primary {
+            background: #219EBC;
+        }
+
+        .section-title {
+            color: #219EBC;
+        }
+
+        .info-label {
+            color: #219EBC;
+        }
+
+        .btn-primary:hover {
+            background: #20728F;
+        }
+
+        .back-link {
+            color: #219EBC;
+        }
+
+        .delete-btn {
+            color: #dc3545;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            font-size: 16px;
+        }
+
+        .delete-btn:hover {
+            color: #c82333;
+        }
+
+        .custom-confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .custom-confirm-dialog .message {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .custom-confirm-dialog .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .custom-confirm-dialog button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .custom-confirm-dialog .confirm-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .custom-confirm-dialog .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>ABLE INFRA ENGINEERING LLP</h1>
 
-<div class="container">
-    <h1>Client Details</h1>
+        <div class="section">
+            <h2>{{ client.name }}</h2>
 
+            <p><strong>Amount Given:</strong> <span class="amount">₹{{ client.amount_given }}</span></p>
+            <p><strong>Project Name:</strong> {{ client.project_name }}</p>
 
-    <div class="section">
-    <h2>{{ client.name }}</h2>
+            <h3>Transactions</h3>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.category }}</td>
+                    <td class="amount">₹{{ transaction.amount }}</td>
+                    <td>
+                        <button class="delete-btn" onclick="showDeleteConfirmation({{ transaction.id }})">🗑</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #94a3b8;">No transactions yet.</td>
+                </tr>
+                {% endfor %}
+            </table>
 
-<p><strong>Amount Given:</strong> ₹{{ client.amount_given }}</p>
-<p><strong>Project Name:</strong> {{ client.project_name }}</p>
+            <h3>Total Transactions: <span class="amount">₹{{ total_amount }}</span></h3>
 
-<h3>Transactions</h3>
-<table border="1">
-    <tr>
-        <th>Date</th>
-        <th>Category</th>
-        <th>Amount</th>
-    </tr>
-    {% for transaction in transactions %}
-    <tr>
-        <td>{{ transaction.date }}</td>
-        <td>{{ transaction.category }}</td>
-        <td>${{ transaction.amount }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="3">No transactions yet.</td>
-    </tr>
-    {% endfor %}
-</table>
+            <a href="{% url 'add_transaction' client.id %}" class="btn">Add Transaction</a>
+        </div>
+    </div>
 
-<h3>Total Transactions: ₹{{ total_amount }}</h3>
+    <div class="dialog-overlay" id="dialogOverlay"></div>
+    <div class="custom-confirm-dialog" id="confirmDialog">
+        <div class="message">Are you sure you want to delete this transaction?</div>
+        <div class="buttons">
+            <button class="cancel-btn" onclick="hideConfirmDialog()">Cancel</button>
+            <button class="confirm-btn" onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
 
-<a href="{% url 'add_transaction' client.id %}" class="btn">Add Transaction</a>
+    <script>
+    let deleteCallback = null;
 
+    function showConfirmDialog(callback) {
+        document.getElementById('dialogOverlay').style.display = 'block';
+        document.getElementById('confirmDialog').style.display = 'block';
+        deleteCallback = callback;
+    }
 
+    function hideConfirmDialog() {
+        document.getElementById('dialogOverlay').style.display = 'none';
+        document.getElementById('confirmDialog').style.display = 'none';
+        deleteCallback = null;
+    }
 
+    function confirmDelete() {
+        if (deleteCallback) {
+            deleteCallback();
+        }
+        hideConfirmDialog();
+    }
+
+    function showDeleteConfirmation(transactionId) {
+        showConfirmDialog(() => {
+            fetch(`/transactions/delete/${transactionId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.reload();
+                } else {
+                    alert('Failed to delete transaction');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete transaction');
+            });
+        });
+    }
+    </script>
 </body>
 </html>
 

@@ -4,52 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Client</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            padding: 30px;
+            min-height: 100vh;
         }
         .container {
-            max-width: 400px;
+            max-width: 500px;
             margin: auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #aaa;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(33, 158, 188, 0.1),
+                       0 5px 15px rgba(33, 158, 188, 0.05);
         }
         h2 {
-            background: #4CAF50;
+            font-family: 'Montserrat', sans-serif;
+            background: #219EBC;
             color: white;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: #219EBC;
+            margin-bottom: 8px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
         input {
             width: 100%;
-            padding: 8px;
+            padding: 12px 14px;
             margin-top: 5px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            border-color: #219EBC;
+            box-shadow: 0 0 0 1px #219EBC;
         }
         .btn {
             display: block;
-            padding: 10px;
-            background: #4CAF50;
+            width: 100%;
+            padding: 14px;
+            background: #219EBC;
             color: white;
             text-align: center;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 10px;
+            border-radius: 10px;
+            margin-top: 12px;
             border: none;
             cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
         }
         .btn:hover {
-            background: #45a049;
+            background: #20728F;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(33, 158, 188, 0.2);
+        }
+        .btn-primary {
+            background: #219EBC;
+        }
+        .btn-primary:hover {
+            background: #20728F;
+        }
+        .btn-cancel {
+            display: inline-block;
+            width: auto;
+            padding: 10px 20px;
+            background: #f8fafc;
+            color: #219EBC;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 12px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid #219EBC;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .btn-cancel:hover {
+            background: #219EBC;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 158, 188, 0.2);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .button-container .btn {
+            width: auto;
+            padding: 10px 30px;
         }
     </style>
 </head>
@@ -71,9 +147,11 @@
             <label>Amount Given</label>
             {{ form.amount_given }}
         </div>
-        <button type="submit" class="btn">Save Client</button>
+        <div class="button-container">
+            <button type="submit" class="btn">Save Client</button>
+            <a href="{% url 'dashboard' %}" class="btn-cancel">Cancel</a>
+        </div>
     </form>
-    <a href="{% url 'dashboard' %}" class="btn">Cancel</a>
 </div>
 
 </body>

@@ -5,25 +5,311 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accounting Table</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; }
-        th { background-color: #4CAF50; color: white; }
-        .editable { background-color: #f9f9f9; cursor: pointer; }
-        input, select { width: 100%; border: none; background: transparent; }
-        .delete-btn { color: red; cursor: pointer; }
-        #addRowBtn { margin-bottom: 10px; padding: 8px; background: #4CAF50; color: white; border: none; cursor: pointer; }
-        .disabled { background-color: #ddd !important; pointer-events: none; }
+        body { 
+            font-family: Arial, sans-serif;
+            padding: 5px;
+            padding-bottom: 60px;
+        }
+
+        .table-container {
+            max-width: none;
+            margin: 20px 0 0 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .table-header {
+            text-align: center;
+            margin-bottom: 10px;
+            padding: 0 !important;
+        }
+
+        .table-title {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        table { 
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        th { 
+            background-color: #309CA9;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td { 
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .editable { 
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        input, select { 
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 2px;
+        }
+
+        .numeric {
+            text-align: right;
+        }
+
+        .delete-btn { 
+            color: red;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px 8px;
+        }
+
+        .disabled { 
+            background-color: #eee;
+            pointer-events: none;
+        }
+
+        #addRowContainer { 
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        #addRowBtn { 
+            padding: 8px 16px;
+            background: #309CA9;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #addRowBtn:hover {
+            background: #27808A;
+        }
+
+        .bank-checkbox {
+            margin: 0;
+            padding: 0;
+            width: auto;
+        }
+
+        .date-input {
+            font-size: 15px;
+            font-weight: 500;
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: white;
+            box-sizing: border-box;
+            min-width: 0;
+            text-align: center;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #219EBC;
+            box-shadow: 0 0 0 1px #219EBC;
+        }
+
+        /* Hide the default date picker icon in some browsers */
+        .date-input::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.7;
+            padding: 0;
+        }
+
+        .date-input::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
+        .date-input::-webkit-datetime-edit {
+            padding: 0;
+        }
+
+        .date-input::-webkit-datetime-edit-fields-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .date-input::-webkit-datetime-edit-day-field,
+        .date-input::-webkit-datetime-edit-month-field,
+        .date-input::-webkit-datetime-edit-year-field {
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Column width specifications */
+        #accounting-table th:nth-child(1),  /* Date */
+        #accounting-table td:nth-child(1) {
+            width: 120px;
+            min-width: 120px;
+            max-width: 120px;
+        }
+
+        #accounting-table th:nth-child(2),  /* Site */
+        #accounting-table td:nth-child(2) {
+            width: 100px;
+        }
+
+        #accounting-table th:nth-child(3),  /* Description */
+        #accounting-table td:nth-child(3) {
+            width: 150px;
+        }
+
+        #accounting-table th:nth-child(4),  /* Bank */
+        #accounting-table td:nth-child(4) {
+            width: 50px;
+        }
+
+        #accounting-table th:nth-child(5),  /* Income */
+        #accounting-table td:nth-child(5),
+        #accounting-table th:nth-child(6),  /* Expense */
+        #accounting-table td:nth-child(6),
+        #accounting-table th:nth-child(7),  /* Balance */
+        #accounting-table td:nth-child(7) {
+            width: 100px;
+        }
+
+        #accounting-table th:nth-child(8),  /* Transaction Type */
+        #accounting-table td:nth-child(8) {
+            width: 120px;
+        }
+
+        #accounting-table th:nth-child(9),  /* Amount */
+        #accounting-table td:nth-child(9),
+        #accounting-table th:nth-child(10), /* Amount Balance */
+        #accounting-table td:nth-child(10) {
+            width: 100px;
+        }
+
+        #accounting-table th:nth-child(11), /* Check Number */
+        #accounting-table td:nth-child(11) {
+            width: 90px;
+        }
+
+        #accounting-table th:nth-child(12), /* Delete */
+        #accounting-table td:nth-child(12) {
+            width: 40px;
+        }
+
+        #searchTab input, #searchTab button {
+            font-size: 15px;
+        }
+
+        #searchIcon:hover, #printIcon:hover {
+            background-color: rgba(48, 156, 169, 0.1);
+        }
+
+        #searchDateBtn:hover {
+            background: #27808A;
+        }
+
+        #searchTab {
+            min-width: 200px;
+        }
+
+        #searchTab input:focus {
+            outline: none;
+            border-color: #309CA9;
+        }
+
+        @media print {
+            @page { size: landscape; margin: 0; }
+            #addRowContainer, #searchIcon, #printIcon, #searchTab {
+                display: none !important;
+            }
+        }
+
+        .custom-confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .custom-confirm-dialog .message {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .custom-confirm-dialog .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .custom-confirm-dialog button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .custom-confirm-dialog .confirm-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .custom-confirm-dialog .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
 
-<h1>Accounting Table</h1>
+<div class="table-container">
+    <div class="table-header">
+        <h1 class="table-title">Accounting Table</h1>
+        <div style="position: absolute; top: 20px; right: 20px; display: flex; align-items: center;">
+            <span id="printIcon" style="cursor: pointer; font-size: 20px; color: #309CA9; padding: 8px; border-radius: 50%; transition: background-color 0.3s; margin-right: 10px;" title="Print table">🖨️</span>
+            <span id="searchIcon" style="cursor: pointer; font-size: 20px; color: #309CA9; padding: 8px; border-radius: 50%; transition: background-color 0.3s;" title="Search by date">🔍</span>
+            <div id="searchTab" style="display:none; position:absolute; right:0; top:40px; background:white; border:1px solid #ccc; padding:10px; border-radius:8px; z-index:10; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <input type="text" id="searchDateInput" class="date-input" placeholder="DD/MM/YYYY" style="width:130px;">
+                <button id="searchDateBtn" style="margin-left:5px; padding: 4px 8px; background: #309CA9; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
+            </div>
+        </div>
+    </div>
 
 <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
 
-<button id="addRowBtn">Add Row</button>
-
+    <div style="overflow-x: auto;">
 <table id="accounting-table">
     <thead>
         <tr>
@@ -36,13 +322,13 @@
     <tbody>
         {% for entry in entries %}
         <tr data-id="{{ entry.id }}">
-            <td><input type="date" class="date-input" value="{{ entry.date|date:'Y-m-d' }}"></td>
+            <td><input type="text" class="date-input" value="{{ entry.date|date:'d/m/Y' }}" onchange="updateBalances()"></td>
             <td contenteditable="true" class="editable">{{ entry.site_name }}</td>
             <td contenteditable="true" class="editable">{{ entry.description }}</td>
             <td><input type="checkbox" class="bank-checkbox" {% if entry.bank %}checked{% endif %} onchange="toggleBankMode(this)"></td>
             <td contenteditable="true" class="editable numeric income" oninput="updateBalances()">{{ entry.income|default:"0.00" }}</td>
             <td contenteditable="true" class="editable numeric expense" oninput="updateBalances()">{{ entry.expense|default:"0.00" }}</td>
-            <td class="balance">0.00</td>
+            <td class="balance">{{ entry.balance|default:"0.00" }}</td>
             <td>
                 <select class="transaction-type" {% if not entry.bank %}disabled{% endif %} onchange="updateBalances()">
                     <option {% if entry.transaction_type == 'Withdrawal' %}selected{% endif %}>Withdrawal</option>
@@ -51,21 +337,46 @@
                 </select>
             </td>
             <td contenteditable="true" class="editable numeric amount" {% if not entry.bank %}class="disabled"{% endif %} oninput="updateBalances()">{{ entry.amount|default:"0.00" }}</td>
-            <td class="amount-balance">0.00</td>
-            <td contenteditable="true" class="editable check-number" {% if not entry.bank %}class="disabled"{% endif %}>{{ entry.check_number }}</td>
+            <td class="amount-balance">{{ entry.amount_balance|default:"0.00" }}</td>
+            <td><input type="text" class="check-number" {% if not entry.bank %}disabled{% endif %} value="{{ entry.check_number }}"></td>
             <td><button class="delete-btn" onclick="deleteRow(this)">🗑</button></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+    </div>
 
+<div id="addRowContainer">
+    <button id="addRowBtn">Add Row</button>
+</div>
+</div>
+
+<div class="dialog-overlay" id="dialogOverlay"></div>
+<div class="custom-confirm-dialog" id="confirmDialog">
+    <div class="message">Are you sure you want to delete this entry?</div>
+    <div class="buttons">
+        <button class="cancel-btn" onclick="hideConfirmDialog()">Cancel</button>
+        <button class="confirm-btn" onclick="confirmDelete()">Delete</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+let saveInProgress = false;
+let saveQueue = [];
+let deleteCallback = null;
+
 document.getElementById("addRowBtn").addEventListener("click", function () {
     let table = document.getElementById("accounting-table").getElementsByTagName('tbody')[0];
     let newRow = table.insertRow();
-
+    // Get today's date in DD/MM/YYYY format
+    const today = new Date();
+    const day = today.getDate().toString().padStart(2, '0');
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const year = today.getFullYear();
+    const displayDate = `${day}/${month}/${year}`;
     let rowHTML = `
-        <td><input type="date" class="date-input"></td>
+        <td><input type="text" class="date-input" value="${displayDate}" onchange="updateBalances()"></td>
         <td contenteditable="true" class="editable"></td>
         <td contenteditable="true" class="editable"></td>
         <td><input type="checkbox" class="bank-checkbox" onchange="toggleBankMode(this)"></td>
@@ -81,73 +392,189 @@ document.getElementById("addRowBtn").addEventListener("click", function () {
         </td>
         <td contenteditable="true" class="editable numeric amount disabled" oninput="updateBalances()">0.00</td>
         <td class="amount-balance">0.00</td>
-        <td contenteditable="true" class="editable check-number disabled"></td>
+        <td><input type="text" class="check-number" disabled></td>
         <td><button class="delete-btn" onclick="deleteRow(this)">🗑</button></td>
     `;
-
     newRow.innerHTML = rowHTML;
+    flatpickr(newRow.querySelector('.date-input'), {dateFormat: 'd/m/Y', allowInput: true});
     updateBalances();
 });
 
 function updateBalances() {
     let rows = document.querySelectorAll("tbody tr");
-    let previousBalance = 0;
-    let previousAmountBalance = 0;
+    let runningBalance = 0;
+    let runningAmountBalance = 0;
 
     rows.forEach((row, index) => {
         let income = parseFloat(row.querySelector(".income")?.innerText || row.querySelector(".income")?.value || "0");
         let expense = parseFloat(row.querySelector(".expense")?.innerText || row.querySelector(".expense")?.value || "0");
         let balanceCell = row.querySelector(".balance");
-
         let transactionType = row.querySelector(".transaction-type")?.value;
         let amount = parseFloat(row.querySelector(".amount")?.innerText || row.querySelector(".amount")?.value || "0");
         let amountBalanceCell = row.querySelector(".amount-balance");
         let bankChecked = row.querySelector(".bank-checkbox")?.checked;
 
-        // **Compute first part Balance**
-        let balance = previousBalance + income - expense;
-        balanceCell.innerText = balance.toFixed(2);
-        previousBalance = balance;
+        // Update running balance
+        runningBalance = runningBalance + income - expense;
+        balanceCell.innerText = runningBalance.toFixed(2);
 
-        // **Compute second part Amount Balance**
-        let amountBalance = previousAmountBalance;
+        // Update bank amount balance
         if (bankChecked) {
             if (transactionType === "Withdrawal" || transactionType === "Transfer") {
-                amountBalance -= amount;
+                runningAmountBalance -= amount;
             } else if (transactionType === "Deposit") {
-                amountBalance += amount;
+                runningAmountBalance += amount;
             }
         }
-        amountBalanceCell.innerText = amountBalance.toFixed(2);
-        previousAmountBalance = amountBalance;
+        amountBalanceCell.innerText = runningAmountBalance.toFixed(2);
 
-        // Save the entry data
-        saveRowData(row);
+        // Queue the save operation if the row is valid
+        if (isValidRow(row)) {
+            queueSaveRow(row);
+        }
     });
 }
 
-function saveRowData(row) {
+function queueSaveRow(row) {
+    // Add the row to the queue if it's not already there
+    if (!saveQueue.includes(row)) {
+        saveQueue.push(row);
+    }
+    processQueue();
+}
+
+async function processQueue() {
+    if (saveInProgress || saveQueue.length === 0) {
+        return;
+    }
+
+    saveInProgress = true;
+    try {
+        const row = saveQueue.shift();
+        await saveRowData(row);
+    } finally {
+        saveInProgress = false;
+        if (saveQueue.length > 0) {
+            setTimeout(processQueue, 100); // Process next item with a small delay
+        }
+    }
+}
+
+async function saveRowData(row) {
     let entryId = row.getAttribute("data-id");
-    let date = row.querySelector(".date-input").value;
-    let siteName = row.querySelector(".editable:nth-child(2)").innerText;
-    let description = row.querySelector(".editable:nth-child(3)").innerText;
+    let dateInput = row.querySelector(".date-input");
+    let dateValue = dateInput.value;
+    let date = dateValue;
+    // Convert DD/MM/YYYY to YYYY-MM-DD for backend
+    if (dateValue && dateValue.includes('/')) {
+        const [day, month, year] = dateValue.split('/');
+        date = `${year}-${month}-${day}`;
+    }
+    let siteName = row.querySelector(".editable:nth-child(2)").innerText.trim();
+    let description = row.querySelector(".editable:nth-child(3)").innerText.trim();
     let bank = row.querySelector(".bank-checkbox").checked;
     let income = parseFloat(row.querySelector(".income").innerText || "0");
     let expense = parseFloat(row.querySelector(".expense").innerText || "0");
     let transactionType = row.querySelector(".transaction-type").value;
     let amount = parseFloat(row.querySelector(".amount").innerText || "0");
-    let checkNumber = row.querySelector(".check-number").innerText;
+    let checkNumber = row.querySelector(".check-number").value.trim();
 
-    fetch('/save_entry/', {
+    try {
+        const response = await fetch('/acclive/save_entry/', {
         method: "POST",
-        headers: { "Content-Type": "application/json", "X-CSRFToken": document.getElementById("csrf-token").value },
-        body: JSON.stringify({ id: entryId, date: date, site_name: siteName, description: description, bank: bank, income: income, expense: expense, transaction_type: transactionType, amount: amount, check_number: checkNumber })
-    }).then(response => response.json()).then(data => {
+        headers: { 
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.getElementById("csrf-token").value
+        },
+            body: JSON.stringify({ 
+                id: entryId, 
+                date: date, 
+                site_name: siteName, 
+                description: description, 
+                bank: bank, 
+                income: income, 
+                expense: expense, 
+                transaction_type: transactionType, 
+                amount: amount, 
+                check_number: checkNumber 
+            })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.error || 'Network response was not ok');
+        }
+
         if (data.id) {
             row.setAttribute("data-id", data.id);
+            row.querySelector(".balance").innerText = parseFloat(data.balance).toFixed(2);
+            row.querySelector(".amount-balance").innerText = parseFloat(data.amount_balance).toFixed(2);
+            if (data.check_number !== undefined) {
+                row.querySelector(".check-number").value = data.check_number;
+            }
         }
-    }).catch(error => console.error('Error:', error));
+    } catch (error) {
+        console.error('Error:', error.message);
+        if (!error.message.includes("database is locked")) {
+            alert('Failed to save entry: ' + error.message);
+        } else {
+            queueSaveRow(row);
+        }
+    }
 }
+
+function isValidRow(row) {
+    let date = row.querySelector(".date-input").value;
+    let siteName = row.querySelector(".editable:nth-child(2)").innerText.trim();
+    let description = row.querySelector(".editable:nth-child(3)").innerText.trim();
+    let income = parseFloat(row.querySelector(".income")?.innerText || row.querySelector(".income")?.value || "0");
+    let expense = parseFloat(row.querySelector(".expense")?.innerText || row.querySelector(".expense")?.value || "0");
+    let amount = parseFloat(row.querySelector(".amount")?.innerText || row.querySelector(".amount")?.value || "0");
+
+    // Allow saving if any of these conditions are met:
+    // 1. All required fields are filled
+    // 2. There are numeric values to save
+    // 3. The row has an ID (meaning it's an existing row)
+    return (date && siteName && description) || 
+           (income !== 0 || expense !== 0 || amount !== 0) || 
+           row.getAttribute("data-id");
+}
+
+// Add event listeners for all editable fields
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('income') || 
+        e.target.classList.contains('expense') || 
+        e.target.classList.contains('amount') ||
+        e.target.classList.contains('check-number') ||
+        e.target.classList.contains('editable')) {
+        updateBalances();
+    }
+});
+
+document.addEventListener('blur', function(e) {
+    if (e.target.classList.contains('editable') ||
+        e.target.classList.contains('date-input') ||
+        e.target.classList.contains('check-number')) {
+        updateBalances();
+    }
+});
+
+// Add event listener for date changes
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('date-input') || 
+        e.target.classList.contains('bank-checkbox') ||
+        e.target.classList.contains('transaction-type')) {
+        updateBalances();
+    }
+});
+
+// Add event listener for contenteditable fields
+document.addEventListener('keydown', function(e) {
+    if (e.target.classList.contains('editable') && e.key === 'Enter') {
+        e.preventDefault();
+        e.target.blur();
+    }
+});
 
 function toggleBankMode(checkbox) {
     let row = checkbox.closest("tr");
@@ -159,32 +586,138 @@ function toggleBankMode(checkbox) {
         transactionType.disabled = false;
         amount.contentEditable = true;
         amount.classList.remove("disabled");
-        checkNumber.contentEditable = true;
-        checkNumber.classList.remove("disabled");
+        updateCheckNumberState(row);
     } else {
         transactionType.disabled = true;
         amount.contentEditable = false;
         amount.classList.add("disabled");
-        checkNumber.contentEditable = false;
-        checkNumber.classList.add("disabled");
+        checkNumber.disabled = true;
+        checkNumber.value = "";
+        updateBalances();
     }
+}
 
+function updateCheckNumberState(row) {
+    let transactionType = row.querySelector(".transaction-type").value;
+    let checkNumber = row.querySelector(".check-number");
+    let bankChecked = row.querySelector(".bank-checkbox").checked;
+    
+    if (bankChecked && (transactionType === "Withdrawal" || transactionType === "Transfer")) {
+        checkNumber.disabled = false;
+    } else {
+        checkNumber.disabled = true;
+        checkNumber.value = "";
     updateBalances();
+}
+}
+
+// Add event listener for transaction type changes
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('transaction-type')) {
+        const row = e.target.closest('tr');
+        updateCheckNumberState(row);
+    }
+});
+
+function showConfirmDialog(callback) {
+    document.getElementById('dialogOverlay').style.display = 'block';
+    document.getElementById('confirmDialog').style.display = 'block';
+    deleteCallback = callback;
+}
+
+function hideConfirmDialog() {
+    document.getElementById('dialogOverlay').style.display = 'none';
+    document.getElementById('confirmDialog').style.display = 'none';
+    deleteCallback = null;
+}
+
+function confirmDelete() {
+    if (deleteCallback) {
+        deleteCallback();
+    }
+    hideConfirmDialog();
 }
 
 function deleteRow(button) {
-    let row = button.closest("tr");
-    let entryId = row.getAttribute("data-id");
-
-    fetch('/delete_entry/', {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-CSRFToken": document.getElementById("csrf-token").value },
-        body: JSON.stringify({ id: entryId })
-    }).then(response => response.json()).then(() => {
-        row.remove();
-        updateBalances();
-    }).catch(error => console.error('Error:', error));
+    const row = button.closest("tr");
+    const entryId = row.getAttribute("data-id");
+    
+    showConfirmDialog(() => {
+        fetch('/acclive/delete_entry/', {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "X-CSRFToken": document.getElementById("csrf-token").value
+            },
+            body: JSON.stringify({ id: entryId })
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Network response was not ok');
+                });
+            }
+            return response.json();
+        }).then(() => {
+            row.remove();
+            updateBalances();
+        }).catch(error => {
+            console.error('Error:', error.message);
+            alert('Failed to delete entry: ' + error.message);
+        });
+    });
 }
+
+// Add input validation for check number
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('check-number')) {
+        // Remove any non-digit characters
+        e.target.value = e.target.value.replace(/\D/g, '');
+        updateBalances();
+    }
+});
+
+// Initialize flatpickr for all date-inputs on page load
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.date-input').forEach(input => {
+        flatpickr(input, {dateFormat: 'd/m/Y', allowInput: true});
+    });
+});
+
+// --- Search Icon and Tab Logic ---
+document.getElementById('searchIcon').addEventListener('click', function() {
+    const tab = document.getElementById('searchTab');
+    tab.style.display = (tab.style.display === 'none' || tab.style.display === '') ? 'block' : 'none';
+    if (tab.style.display === 'block') {
+        document.getElementById('searchDateInput').focus();
+    }
+});
+
+// Initialize flatpickr for the search date input
+flatpickr(document.getElementById('searchDateInput'), {dateFormat: 'd/m/Y', allowInput: true});
+
+// --- Search by Date ---
+document.getElementById('searchDateBtn').addEventListener('click', function() {
+    const searchDate = document.getElementById('searchDateInput').value.trim();
+    let found = false;
+    document.querySelectorAll('#accounting-table tbody tr').forEach(row => {
+        const dateInput = row.querySelector('.date-input');
+        if (dateInput && dateInput.value === searchDate) {
+            row.scrollIntoView({behavior: 'smooth', block: 'center'});
+            row.style.backgroundColor = '#ffe066'; // highlight
+            found = true;
+            setTimeout(() => { row.style.backgroundColor = ''; }, 2000); // remove highlight after 2s
+        }
+    });
+    if (!found) {
+        alert('No entry found for this date.');
+    }
+    document.getElementById('searchTab').style.display = 'none';
+});
+
+// --- Print Functionality ---
+document.getElementById('printIcon').addEventListener('click', function() {
+    window.print();
+});
 </script>
 
 </body>
