@@ -69,7 +69,7 @@ LOGOUT_REDIRECT_URL = 'login'
 LOGOUT_URL = 'logout'
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddlewre',
+    'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -157,7 +157,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATIC_ROOT= BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoice.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
