@@ -27,7 +27,16 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "treeg-production.up.railway.app",
+    ".railway.app",
+    "localhost",
+    "127.0.0.1"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://treeg-production.up.railway.app"
+]
 
 
 # Application definition
