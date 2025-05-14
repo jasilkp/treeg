@@ -28,14 +28,16 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    "treeg-production.up.railway.app",
+    "ableinfra.up.railway.app",
+    "ableinfraeng.railway.internal",
     ".railway.app",
     "localhost",
     "127.0.0.1"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://treeg-production.up.railway.app"
+    "https://ableinfra.up.railway.app",
+    "https://ableinfraeng.railway.internal"
 ]
 
 
