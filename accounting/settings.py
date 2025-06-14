@@ -124,7 +124,11 @@ DATABASES = {
         conn_max_age=600,
     )
 }
-DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
+
+# Add SSL mode only if using Postgres in production
+db_url = os.getenv('DATABASE_URL', '')
+if 'postgres' in db_url:
+    DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 
 # Password validation
