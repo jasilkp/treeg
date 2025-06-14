@@ -28,16 +28,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    "ableinfra.up.railway.app",
-    "ableinfraeng.railway.internal",
-    ".railway.app",
+    ".onrender.com",
     "localhost",
     "127.0.0.1"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://ableinfra.up.railway.app",
-    "https://ableinfraeng.railway.internal"
+    "https://*.onrender.com"
 ]
 
 
@@ -123,10 +120,25 @@ load_dotenv()  # Optional: Only if you use a .env file locally
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'postgresql://postgres:GlosYGnOyespaAqbXuxMfjNrzNUkpmNr@tramway.proxy.rlwy.net:43097/railway'),
+        default=os.getenv('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=True,
+        engine='django.db.backends.postgresql',
+        options={
+            'connect_timeout': 10,
+        }
     )
+}
+
+# Add these settings for better performance
+CONN_MAX_AGE = 600
+CONN_HEALTH_CHECKS = True
+
+# Cache settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
 }
 
  
