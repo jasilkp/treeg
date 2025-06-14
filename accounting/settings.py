@@ -11,11 +11,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv()
+import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# For local development, load environment variables from .env
+if os.environ.get('RENDER', None) is None:
+    from dotenv import load_dotenv
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    load_dotenv(dotenv_path=BASE_DIR / '.env')
+    print("[DEBUG] DATABASE_URL:", os.getenv('DATABASE_URL'))
+else:
+    BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -36,8 +41,6 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://ableinfra.up.railway.app",
-    "https://ableinfraeng.railway.internal"
 ]
 
 
@@ -115,21 +118,14 @@ WSGI_APPLICATION = 'accounting.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-import os
-import dj_database_url
-from dotenv import load_dotenv
-
-load_dotenv()  # Optional: Only if you use a .env file locally
-
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=True
     )
 }
+DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
- 
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
