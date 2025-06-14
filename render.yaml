@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: accounting
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn accounting.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DEBUG
+        value: False 
