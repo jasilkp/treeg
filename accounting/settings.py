@@ -123,7 +123,7 @@ load_dotenv()  # Optional: Only if you use a .env file locally
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'postgresql://postgres:GlosYGnOyespaAqbXuxMfjNrzNUkpmNr@tramway.proxy.rlwy.net:43097/railway'),
+        default=os.getenv('DATABASE_URL'),
         conn_max_age=600,
         ssl_require=True
     )
