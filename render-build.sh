@@ -6,4 +6,14 @@ apt-get update && apt-get install -y libpq-dev
 pip install --upgrade pip
 pip install -r requirements.txt
 python manage.py migrate
-python manage.py collectstatic --noinput 
+
+# Add diagnostic commands
+echo "--- Listing static directory before collectstatic ---"
+ls -R static
+echo "----------------------------------------------------"
+
+python manage.py collectstatic --noinput
+
+echo "--- Listing staticfiles directory after collectstatic ---"
+ls -R staticfiles
+echo "-------------------------------------------------------" 
