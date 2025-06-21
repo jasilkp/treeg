@@ -16,6 +16,9 @@ echo "--- Listing static directory before collectstatic ---"
 ls -R static
 echo "----------------------------------------------------"
 
+# Clear staticfiles directory before collectstatic
+rm -rf staticfiles/
+
 python manage.py collectstatic --noinput
 
 echo "--- Listing staticfiles directory after collectstatic ---"
