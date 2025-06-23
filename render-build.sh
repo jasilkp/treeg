@@ -2,25 +2,30 @@
 # exit on error
 set -o errexit
 
-echo "--- Starting build script ---"
-echo "--- Running apt-get update and install ---"
-apt-get update && apt-get install -y libpq-dev
-echo "--- Finished apt-get ---"
+# Diagnostic: Show current directory and files
+echo "================ BUILD START ================"
+pwd
+echo "================ FILES IN ROOT =============="
+ls -l
 
-pip install --upgrade pip
-pip install -r requirements.txt
-python manage.py migrate
-
-# Add diagnostic commands
 echo "--- Listing static directory before collectstatic ---"
-ls -R static
+ls -lR static || echo "[WARNING] static directory not found!"
 echo "----------------------------------------------------"
 
 # Clear staticfiles directory before collectstatic
 rm -rf staticfiles/
 
+# Install dependencies and migrate
+echo "--- Installing dependencies and running migrations ---"
+pip install --upgrade pip
+pip install -r requirements.txt
+python manage.py migrate
+
+echo "--- Running collectstatic ---"
 python manage.py collectstatic --noinput
 
 echo "--- Listing staticfiles directory after collectstatic ---"
-ls -R staticfiles
-echo "-------------------------------------------------------" 
+ls -lR staticfiles || echo "[WARNING] staticfiles directory not found!"
+echo "-------------------------------------------------------"
+
+echo "================ BUILD END ================" 
