@@ -51,11 +51,23 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+## Deployment on Koyeb with Neon Database
+
+1. Set up a Neon PostgreSQL database and copy the connection string (DATABASE_URL).
+2. Deploy your Django app on Koyeb:
+   - Set environment variables in Koyeb:
+     - `SECRET_KEY`: your Django secret key
+     - `DEBUG`: False
+     - `DATABASE_URL`: your Neon PostgreSQL connection string
+   - Set your Koyeb app domain in `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` in `settings.py`.
+3. Push your code to your repository and connect it to Koyeb for deployment.
+4. Koyeb will run your app using the environment variables and Neon database.
+
 ## Environment Variables
 
 - `SECRET_KEY`: Django secret key
 - `DEBUG`: Set to 'True' for development, 'False' for production
-- `DATABASE_URL`: PostgreSQL database URL
+- `DATABASE_URL`: Neon PostgreSQL database URL
 
 ## Contributing
 

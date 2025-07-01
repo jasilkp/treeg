@@ -13,14 +13,13 @@ import os
 from pathlib import Path
 import dj_database_url
 
-# For local development, load environment variables from .env
-if os.environ.get('RENDER', None) is None:
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env file in development
+if not os.getenv('FLY_APP_NAME'):
     from dotenv import load_dotenv
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    load_dotenv(dotenv_path=BASE_DIR / '.env')
-    print("[DEBUG] DATABASE_URL:", os.getenv('DATABASE_URL'))
-else:
-    BASE_DIR = Path(__file__).resolve().parent.parent
+    load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -33,15 +32,14 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    'accounting-nd6g.onrender.com',
-    '.onrender.com',
+    'ableaccounting.pythonanywhere.com',  # PythonAnywhere domain
     'localhost',
     '127.0.0.1'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://accounting-nd6g.onrender.com',
-    "https://*.onrender.com"
+    'https://*.fly.dev',  # Allow all Fly.io app domains
+    'https://ableaccounting.pythonanywhere.com',
 ]
 
 
@@ -126,10 +124,13 @@ DATABASES = {
     )
 }
 
-# Add SSL mode only if using Postgres in production
-db_url = os.getenv('DATABASE_URL', '')
-if 'postgres' in db_url:
-    DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
+# Configure SSL and other Postgres options
+db_config = DATABASES['default']
+if db_config.get('ENGINE') == 'django.db.backends.postgresql':
+    db_config['OPTIONS'] = {
+        'sslmode': 'require',
+        'connect_timeout': 10,
+    }
 
 # Add these settings for better performance
 CONN_MAX_AGE = 600
