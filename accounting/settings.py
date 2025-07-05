@@ -32,14 +32,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    'ableaccounting.pythonanywhere.com',  # PythonAnywhere domain
+    'Ableaccounting.pythonanywhere.com',  # PythonAnywhere domain
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
+    '.pythonanywhere.com',  # Allow all PythonAnywhere subdomains
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.fly.dev',  # Allow all Fly.io app domains
-    'https://ableaccounting.pythonanywhere.com',
+    'https://Ableaccounting.pythonanywhere.com',
+    'https://*.pythonanywhere.com',
 ]
 
 
@@ -216,3 +217,11 @@ LOGGING = {
         },
     },
 }
+
+# Security settings for production
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
