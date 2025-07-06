@@ -11,11 +11,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv()
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env file in development
+if not os.getenv('FLY_APP_NAME'):
+    from dotenv import load_dotenv
+    load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,16 +32,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    "ableinfra.up.railway.app",
-    "ableinfraeng.railway.internal",
-    ".railway.app",
-    "localhost",
-    "127.0.0.1"
+    'Ableaccounting.pythonanywhere.com',  # PythonAnywhere domain
+    'localhost',
+    '127.0.0.1',
+    '.pythonanywhere.com',  # Allow all PythonAnywhere subdomains
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://ableinfra.up.railway.app",
-    "https://ableinfraeng.railway.internal"
+    'https://Ableaccounting.pythonanywhere.com',
+    'https://*.pythonanywhere.com',
 ]
 
 
@@ -115,21 +118,33 @@ WSGI_APPLICATION = 'accounting.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-import os
-import dj_database_url
-from dotenv import load_dotenv
-
-load_dotenv()  # Optional: Only if you use a .env file locally
-
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'postgresql://postgres:GlosYGnOyespaAqbXuxMfjNrzNUkpmNr@tramway.proxy.rlwy.net:43097/railway'),
+        default=os.getenv('DATABASE_URL', 'postgresql://postgres:TWPjkFyciPLkWiYEUjrhvHPyLFerTtZI@nozomi.proxy.rlwy.net:22715/railway'),
         conn_max_age=600,
         ssl_require=True
     )
 }
 
- 
+# Configure SSL and other Postgres options
+db_config = DATABASES['default']
+if db_config.get('ENGINE') == 'django.db.backends.postgresql':
+    db_config['OPTIONS'] = {
+        'sslmode': 'require',
+        'connect_timeout': 10,
+    }
+
+# Add these settings for better performance
+CONN_MAX_AGE = 600
+CONN_HEALTH_CHECKS = True
+
+# Cache settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -182,3 +197,32 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+    },
+}
+
+# Security settings for production
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
