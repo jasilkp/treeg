@@ -66,6 +66,8 @@ ALLOWED_HOSTS = _get_env_list(
         'localhost',
         '127.0.0.1',
         '.pythonanywhere.com',  # Allow all PythonAnywhere subdomains
+        '.up.railway.app',
+        '.railway.app',
     ],
 )
 
@@ -74,6 +76,8 @@ CSRF_TRUSTED_ORIGINS = _get_env_list(
     default=[
         'https://Ableaccounting.pythonanywhere.com',
         'https://*.pythonanywhere.com',
+        'https://*.up.railway.app',
+        'https://*.railway.app',
     ],
 )
 
