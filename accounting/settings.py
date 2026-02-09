@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from urllib.parse import urlparse
+
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,25 +33,57 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [
-    'Ableaccounting.pythonanywhere.com',  # PythonAnywhere domain
-    'localhost',
-    '127.0.0.1',
-    '.pythonanywhere.com',  # Allow all PythonAnywhere subdomains
-]
+def _get_env_list(name, default=None):
+    raw_value = os.getenv(name)
+    if raw_value:
+        return [item.strip() for item in raw_value.split(',') if item.strip()]
+    return default or []
+
+
+def _add_host_from_env(env_name, add_csrf=True):
+    raw_value = os.getenv(env_name)
+    if not raw_value:
+        return
+    parsed = urlparse(raw_value) if '://' in raw_value else None
+    host = (parsed.hostname if parsed else raw_value).split('/')[0].split(':')[0]
+    if host and host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
+    if add_csrf and host:
+        csrf_origin = f"https://{host}"
+        if csrf_origin not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(csrf_origin)
+
+
+ALLOWED_HOSTS = _get_env_list(
+    'ALLOWED_HOSTS',
+    default=[
+        'Ableaccounting.pythonanywhere.com',  # PythonAnywhere domain
+        'localhost',
+        '127.0.0.1',
+        '.pythonanywhere.com',  # Allow all PythonAnywhere subdomains
+    ],
+)
+
+CSRF_TRUSTED_ORIGINS = _get_env_list(
+    'CSRF_TRUSTED_ORIGINS',
+    default=[
+        'https://Ableaccounting.pythonanywhere.com',
+        'https://*.pythonanywhere.com',
+    ],
+)
 
 # Render sets this automatically; add it when present
 RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://Ableaccounting.pythonanywhere.com',
-    'https://*.pythonanywhere.com',
-]
-
-if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
+
+# Railway may expose a public domain or URL
+_add_host_from_env('RAILWAY_PUBLIC_DOMAIN')
+_add_host_from_env('RAILWAY_PUBLIC_URL')
+
+# Honor proxy headers on platforms like Railway
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
