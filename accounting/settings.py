@@ -54,6 +54,11 @@ def _add_host_from_env(env_name, add_csrf=True):
             CSRF_TRUSTED_ORIGINS.append(csrf_origin)
 
 
+def _ensure_in_list(values, item):
+    if item and item not in values:
+        values.append(item)
+
+
 ALLOWED_HOSTS = _get_env_list(
     'ALLOWED_HOSTS',
     default=[
@@ -81,6 +86,26 @@ if RENDER_EXTERNAL_HOSTNAME:
 # Railway may expose a public domain or URL
 _add_host_from_env('RAILWAY_PUBLIC_DOMAIN')
 _add_host_from_env('RAILWAY_PUBLIC_URL')
+
+# Railway deployments frequently use `*.up.railway.app` for the public URL.
+# If we detect we are running on Railway but the explicit host vars were not
+# provided, allow Railway subdomains so the app can start.
+IS_RAILWAY = any(
+    os.getenv(name)
+    for name in (
+        'RAILWAY_ENVIRONMENT',
+        'RAILWAY_PROJECT_ID',
+        'RAILWAY_SERVICE_ID',
+        'RAILWAY_PUBLIC_DOMAIN',
+        'RAILWAY_PUBLIC_URL',
+    )
+)
+
+if IS_RAILWAY:
+    _ensure_in_list(ALLOWED_HOSTS, '.up.railway.app')
+    _ensure_in_list(ALLOWED_HOSTS, '.railway.app')
+    _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.up.railway.app')
+    _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.railway.app')
 
 # Honor proxy headers on platforms like Railway
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
