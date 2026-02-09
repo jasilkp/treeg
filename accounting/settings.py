@@ -189,7 +189,17 @@ WSGI_APPLICATION = 'accounting.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = (
+    os.getenv('DATABASE_PUBLIC_URL')
+    or os.getenv('DATABASE_URL')
+    or os.getenv('DATABASE_PRIVATE_URL')
+)
+
+# If Railway provides both internal and public URLs, prefer the public one when
+# the selected URL points at the internal DNS name.
+if DATABASE_URL and 'railway.internal' in DATABASE_URL and os.getenv('DATABASE_PUBLIC_URL'):
+    DATABASE_URL = os.getenv('DATABASE_PUBLIC_URL')
+
 if DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.config(
