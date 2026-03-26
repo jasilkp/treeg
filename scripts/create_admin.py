@@ -1,4 +1,8 @@
 import os
+import sys
+# Ensure project root is on sys.path so we can import `accounting` when this
+# script is executed from the `scripts/` directory.
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'accounting.settings')
 import django
 django.setup()
