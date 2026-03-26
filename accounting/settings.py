@@ -114,6 +114,14 @@ if IS_RAILWAY:
 # Honor proxy headers on platforms like Railway
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+# During local development, ensure common local hosts are always allowed.
+# This guarantees `127.0.0.1:8000` and `localhost` requests won't be blocked
+# when `DEBUG=True` even if the environment variable parsing fails.
+if DEBUG:
+    _ensure_in_list(ALLOWED_HOSTS, '127.0.0.1')
+    _ensure_in_list(ALLOWED_HOSTS, 'localhost')
+    _ensure_in_list(ALLOWED_HOSTS, '::1')
+
 
 # Application definition
 
