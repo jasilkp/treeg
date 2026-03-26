@@ -122,6 +122,14 @@ if DEBUG:
     _ensure_in_list(ALLOWED_HOSTS, 'localhost')
     _ensure_in_list(ALLOWED_HOSTS, '::1')
 
+# Ensure Railway domains are always allowed (covers cases where env vars
+# override defaults on the platform). This makes `web-production-*.up.railway.app`
+# and similar subdomains accepted by Django's host header checks.
+_ensure_in_list(ALLOWED_HOSTS, '.up.railway.app')
+_ensure_in_list(ALLOWED_HOSTS, '.railway.app')
+_ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.up.railway.app')
+_ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.railway.app')
+
 
 # Application definition
 
