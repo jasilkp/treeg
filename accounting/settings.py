@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from urllib.parse import urlparse
 
+import json
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -35,17 +36,38 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 def _get_env_list(name, default=None):
     raw_value = os.getenv(name)
-    if raw_value:
-        return [item.strip() for item in raw_value.split(',') if item.strip()]
-    return default or []
+    if not raw_value:
+        return default or []
+
+    raw = raw_value.strip()
+
+    # If the env var is a JSON list like ["a", "b"], parse it.
+    if raw.startswith('[') and raw.endswith(']'):
+        try:
+            parsed = json.loads(raw)
+            if isinstance(parsed, list):
+                return [str(item).strip().strip("\"'") for item in parsed if str(item).strip()]
+        except Exception:
+            # fall back to comma-splitting
+            pass
+
+    # Otherwise split on commas and strip surrounding quotes and whitespace
+    items = []
+    for item in raw.split(','):
+        s = item.strip().strip("\"'")
+        if s:
+            items.append(s)
+    return items
 
 
 def _add_host_from_env(env_name, add_csrf=True):
     raw_value = os.getenv(env_name)
     if not raw_value:
         return
-    parsed = urlparse(raw_value) if '://' in raw_value else None
-    host = (parsed.hostname if parsed else raw_value).split('/')[0].split(':')[0]
+    # sanitize surrounding whitespace and quotes
+    raw = raw_value.strip().strip("\"'")
+    parsed = urlparse(raw) if '://' in raw else None
+    host = (parsed.hostname if parsed else raw).split('/')[0].split(':')[0]
     if host and host not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(host)
     if add_csrf and host:
@@ -129,6 +151,10 @@ _ensure_in_list(ALLOWED_HOSTS, '.up.railway.app')
 _ensure_in_list(ALLOWED_HOSTS, '.railway.app')
 _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.up.railway.app')
 _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.railway.app')
+
+# Debug: log ALLOWED_HOSTS at startup (temporary - remove after debugging)
+import sys
+print("ALLOWED_HOSTS (startup):", ALLOWED_HOSTS, file=sys.stderr)
 
 
 # Application definition
