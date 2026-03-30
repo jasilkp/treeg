@@ -128,8 +128,10 @@ IS_RAILWAY = any(
 )
 
 if IS_RAILWAY:
+    _ensure_in_list(ALLOWED_HOSTS, 'ableinfra-accounts-production.up.railway.app')
     _ensure_in_list(ALLOWED_HOSTS, '.up.railway.app')
     _ensure_in_list(ALLOWED_HOSTS, '.railway.app')
+    _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://ableinfra-accounts-production.up.railway.app')
     _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.up.railway.app')
     _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.railway.app')
 
