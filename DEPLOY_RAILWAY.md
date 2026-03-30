@@ -76,3 +76,16 @@ If you want, I can:
 - Add a `railway_build.sh` helper script (recommended) — I can create that now.
 - Walk through connecting this repo to Railway and the exact env vars you should set.
 - Create a GitHub Actions workflow for automatic deploys.
+
+**Config-as-code (optional, recommended for repeatable deploys)**
+
+You can add a repository config file so Railway reads your build/start commands and environment variable template from the repo. I added a template file at `railway.template.json` and an example env file at `.env.example`.
+
+How to use the template:
+- In Railway UI go to Project → Config-as-code → Add File Path and enter `railway.template.json`.
+- Open your Service → Variables and **set the real secret values** (do NOT commit secrets into the repo). In particular set `SECRET_KEY` and `DATABASE_URL` (or `DATABASE_PUBLIC_URL`) at the Service level.
+- Redeploy the service.
+
+Notes:
+- `railway.template.json` contains placeholder values and is a human-editable template — Railway may expect slightly different schema depending on your account. If Railway rejects the file, you can still use the `.env.example` as a copy-paste template when adding Service variables in the UI.
+- After the site is working, remove any temporary debug prints from `accounting/settings.py` (I can do this for you).

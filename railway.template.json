@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "services": [
+    {
+      "name": "web",
+      "path": ".",
+      "buildCommand": "bash scripts/railway_build.sh",
+      "startCommand": "gunicorn accounting.wsgi:application --bind 0.0.0.0:$PORT --log-file -",
+      "env": {
+        "SECRET_KEY": "<SET_SECRET_IN_RAILWAY_UI>",
+        "DEBUG": "False",
+        "DATABASE_URL": "<postgresql://username:password@host:port/dbname>",
+        "ALLOWED_HOSTS": "ableinfra-accounts-production.up.railway.app,.up.railway.app",
+        "CSRF_TRUSTED_ORIGINS": "https://ableinfra-accounts-production.up.railway.app,https://*.up.railway.app"
+      }
+    }
+  ]
+}
