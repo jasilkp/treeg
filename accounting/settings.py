@@ -154,9 +154,16 @@ _ensure_in_list(ALLOWED_HOSTS, '.railway.app')
 _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.up.railway.app')
 _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.railway.app')
 
+# Ensure Railway host is explicitly allowed, even if env parsing has issues.
+if 'ableinfra-accounts-production.up.railway.app' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('ableinfra-accounts-production.up.railway.app')
+
 # Debug: log ALLOWED_HOSTS at startup (temporary - remove after debugging)
 import sys
 print("ALLOWED_HOSTS (startup):", ALLOWED_HOSTS, file=sys.stderr)
+print("CSRF_TRUSTED_ORIGINS (startup):", CSRF_TRUSTED_ORIGINS, file=sys.stderr)
+print("DATABASE_URL (startup):", os.getenv('DATABASE_URL'), file=sys.stderr)
+print("DATABASE_PUBLIC_URL (startup):", os.getenv('DATABASE_PUBLIC_URL'), file=sys.stderr)
 
 
 # Application definition
