@@ -81,17 +81,22 @@ def _ensure_in_list(values, item):
         values.append(item)
 
 
-ALLOWED_HOSTS = _get_env_list(
-    'ALLOWED_HOSTS',
-    default=[
-        'Ableaccounting.pythonanywhere.com',  # PythonAnywhere domain
-        'localhost',
-        '127.0.0.1',
-        '.pythonanywhere.com',  # Allow all PythonAnywhere subdomains
-        '.up.railway.app',
-        '.railway.app',
-    ],
-)
+# Statically allow the production Railway domain and its subdomains.
+# This is a fail-safe to bypass environment var parsing issues in Railway UI.
+ALLOWED_HOSTS = [
+    'Ableaccounting.pythonanywhere.com',
+    'localhost',
+    '127.0.0.1',
+    '.pythonanywhere.com',
+    'ableinfra-accounts-production.up.railway.app',
+    '.up.railway.app',
+    '.railway.app',
+]
+
+# Allow additional hosts from environment variables if present.
+ALLOWED_HOSTS.extend(_get_env_list('ALLOWED_HOSTS'))
+# Deduplicate
+ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS))
 
 CSRF_TRUSTED_ORIGINS = _get_env_list(
     'CSRF_TRUSTED_ORIGINS',
