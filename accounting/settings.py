@@ -89,6 +89,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '.pythonanywhere.com',
     'ableinfra-accounts-production.up.railway.app',
+    'ableinfra-production.up.railway.app',
     '.up.railway.app',
     '.railway.app',
 ]
@@ -134,9 +135,11 @@ IS_RAILWAY = any(
 
 if IS_RAILWAY:
     _ensure_in_list(ALLOWED_HOSTS, 'ableinfra-accounts-production.up.railway.app')
+    _ensure_in_list(ALLOWED_HOSTS, 'ableinfra-production.up.railway.app')
     _ensure_in_list(ALLOWED_HOSTS, '.up.railway.app')
     _ensure_in_list(ALLOWED_HOSTS, '.railway.app')
     _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://ableinfra-accounts-production.up.railway.app')
+    _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://ableinfra-production.up.railway.app')
     _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.up.railway.app')
     _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.railway.app')
 
@@ -159,9 +162,10 @@ _ensure_in_list(ALLOWED_HOSTS, '.railway.app')
 _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.up.railway.app')
 _ensure_in_list(CSRF_TRUSTED_ORIGINS, 'https://*.railway.app')
 
-# Ensure Railway host is explicitly allowed, even if env parsing has issues.
-if 'ableinfra-accounts-production.up.railway.app' not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append('ableinfra-accounts-production.up.railway.app')
+# Ensure Railway hosts are explicitly allowed, even if env parsing has issues.
+for _host in ('ableinfra-accounts-production.up.railway.app', 'ableinfra-production.up.railway.app'):
+    if _host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_host)
 
 # Debug: log ALLOWED_HOSTS at startup (temporary - remove after debugging)
 import sys
