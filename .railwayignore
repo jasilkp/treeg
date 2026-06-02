@@ -1,0 +1,21 @@
+# Keep Railway CLI uploads small and deterministic
+# (exclude local virtualenvs, caches, and local artifacts)
+
+.venv/
+treeg/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local DB / collected static (Railway should build these)
+db.sqlite3
+staticfiles/
+media/
+
+# Editor/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

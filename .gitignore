@@ -31,11 +31,15 @@ staticfiles/
 # Environment
 .env
 .venv
+.venv/
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Local virtualenv folder in this repo
+treeg/
 
 # IDE
 .idea/

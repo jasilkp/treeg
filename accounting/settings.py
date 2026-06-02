@@ -167,14 +167,6 @@ for _host in ('ableinfra-accounts-production.up.railway.app', 'ableinfra-product
     if _host not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(_host)
 
-# Debug: log ALLOWED_HOSTS at startup (temporary - remove after debugging)
-import sys
-print("ALLOWED_HOSTS (startup):", ALLOWED_HOSTS, file=sys.stderr)
-print("CSRF_TRUSTED_ORIGINS (startup):", CSRF_TRUSTED_ORIGINS, file=sys.stderr)
-print("DATABASE_URL (startup):", os.getenv('DATABASE_URL'), file=sys.stderr)
-print("DATABASE_PUBLIC_URL (startup):", os.getenv('DATABASE_PUBLIC_URL'), file=sys.stderr)
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -332,10 +324,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
-STATIC_ROOT= BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# Railway/Railpack may not run `collectstatic` during the image build.
+# Using finders allows WhiteNoise to serve files directly from `STATICFILES_DIRS`.
+# (This is also a safe fallback for any production environment.)
+if (not DEBUG) or IS_RAILWAY:
+    WHITENOISE_USE_FINDERS = True
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
