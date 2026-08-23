@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: accounting-app
+    runtime: python
+    buildCommand: bash build.sh
+    startCommand: gunicorn accounting.wsgi:application --bind 0.0.0.0:$PORT --log-file -
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.9
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com"
+      - key: DJANGO_SETTINGS_MODULE
+        value: accounting.settings

@@ -17,23 +17,26 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from home.views import dashboard
+from django.http import JsonResponse
 
-
-from django.contrib.auth import views as auth_views
+def health_check(request):
+    """Lightweight health check endpoint for monitoring services (e.g. UptimeRobot, Render)."""
+    return JsonResponse({'status': 'ok'})
 
 urlpatterns = [
+    path('health/', health_check, name='health_check'),
     path('admin/', admin.site.urls),
-    path('', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),  # 🔹 Change default route
-    path('dashboard/', include('home.urls')),  # 🔹 Dashboard available after login
+    path('', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('dashboard/', include('home.urls')),
     path('clients/', include('clients.urls')),
     path('transactions/', include('transactions.urls')),
     path('bank/', include('bank.urls')),
     path('accounts/', include('accounts.urls')),
-    path('acclive/',include('acclive.urls')),
+    path('acclive/', include('acclive.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
 ]
+
 
 
 

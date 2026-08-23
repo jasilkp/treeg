@@ -92,6 +92,7 @@ ALLOWED_HOSTS = [
     'ableinfra-production.up.railway.app',
     '.up.railway.app',
     '.railway.app',
+    '.onrender.com',
 ]
 
 # Allow additional hosts from environment variables if present.
@@ -106,14 +107,16 @@ CSRF_TRUSTED_ORIGINS = _get_env_list(
         'https://*.pythonanywhere.com',
         'https://*.up.railway.app',
         'https://*.railway.app',
+        'https://*.onrender.com',
     ],
 )
 
 # Render sets this automatically; add it when present
 RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
+    _ensure_in_list(ALLOWED_HOSTS, RENDER_EXTERNAL_HOSTNAME)
+    _ensure_in_list(CSRF_TRUSTED_ORIGINS, f"https://{RENDER_EXTERNAL_HOSTNAME}")
+
 
 # Railway may expose a public domain or URL
 _add_host_from_env('RAILWAY_PUBLIC_DOMAIN')
